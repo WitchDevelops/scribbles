@@ -4,6 +4,7 @@ It's like Google docs, but nicer. Build from a tutorial by JSM
 ## Dependencies
 - JSM editor - word editor - https://www.npmjs.com/package/jsm-editor
 - Clerk - user authenthication and management - https://clerk.com/
+- Lilve blocks - something for live features - https://liveblocks.io
 
 ## Helpful resources
 ### Customizing Clerk auth
@@ -31,3 +32,6 @@ function MyApp({ pageProps }: AppProps) {
  
 export default MyApp;
 ```
+
+## Setu ID token permissions with Liveblocks
+https://liveblocks.io/docs/authentication/id-token/nextjs

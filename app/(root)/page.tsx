@@ -1,12 +1,44 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import {Header} from "@/components/Header";
+import { Header } from "@/components/Header";
+import { AddDocButton } from "@/components/AddDocButton";
+import { SignedIn, UserButton } from "@clerk/nextjs";
+import Image from "next/image";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-const Home = () => {
+const Home = async () => {
+  const clerkUser = await currentUser();
+  if (!clerkUser) redirect("/sign-in");
+  const documents = [];
+
   return (
-    <div>
-      <Button>Hello</Button>
-    </div>
+    <main className="home-container">
+      <Header className="sticky left-0 top-0">
+        <div className="flex items-center gap-2 lg:gap-4">
+          Notifications
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </Header>
+      {documents.length > 0 ? (
+        <div></div>
+      ) : (
+        <div className="document-list-empty">
+          <Image
+            src="/assets/icons/doc.svg"
+            width={40}
+            height={40}
+            alt="empty"
+          />
+          No documents
+          <AddDocButton
+            userId={clerkUser.id}
+            email={clerkUser.emailAddresses[0].emailAddress}
+          />
+        </div>
+      )}
+    </main>
   );
 };
 
