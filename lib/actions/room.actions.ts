@@ -1,4 +1,4 @@
-'use server'
+"use server";
 
 import { nanoid } from "nanoid";
 import { liveblocks } from "../liveblocks";
@@ -33,5 +33,37 @@ export const createDocument = async ({
   } catch (error) {
     console.error(error);
     console.log("Failed to create a new document");
+  }
+};
+
+export const getDocument = async ({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}) => {
+  try {
+    const room = await liveblocks.getRoom(roomId);
+    // const hasAccess = Object.keys(room.usersAccesses).includes(userId);
+    // if (!hasAccess) {
+    //   throw new Error("You do not have access to this document");
+    // }
+
+    return parseStringify(room);
+  } catch (error) {
+    console.log(`Error while getting a document, eror: ${error}`);
+  }
+};
+
+export const updateDocument = async (roomId: string, title: string) => {
+  try {
+    const updatedRoom = await liveblocks.updateRoom(roomId, {
+      metadata: { title },
+    });
+    revalidatePath(`/documents/${roomId}`);
+    return parseStringify(updatedRoom);
+  } catch (error) {
+    console.log(`Erorr while updating document: ${error}`);
   }
 };
