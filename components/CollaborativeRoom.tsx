@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { updateDocument } from "@/lib/actions/room.actions";
+import { Loader } from "./Loader";
 
 export const CollaborativeRoom = ({
   roomId,
@@ -51,12 +52,13 @@ export const CollaborativeRoom = ({
       ) {
         setEditing(false);
       }
+      updateDocument(roomId, documentTitle); //maybe this here is unnecessary?
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [roomId, documentTitle]);
 
   useEffect(() => {
     if (editing && inputRef.current) {
@@ -68,9 +70,7 @@ export const CollaborativeRoom = ({
     <RoomProvider id={roomId}>
       <ClientSideSuspense
         fallback={
-          <div className="flex align-center justify-center h-screen">
-            Loading…
-          </div>
+          <Loader />
         }
       >
         <div className="collaborative-room">
