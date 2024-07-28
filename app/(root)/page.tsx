@@ -43,7 +43,7 @@ const Home = async () => {
                   className="document-link flex flex-1 items-center gap-4"
                   href={`/documents/${id}`}
                 >
-                  <div className="hidden rounded-md bg-dark-500 p-2 sm:block">
+                  <div className="hidden rounded-md sm:block">
                     <Image
                       src="/assets/icons/doc.svg"
                       width={40}
