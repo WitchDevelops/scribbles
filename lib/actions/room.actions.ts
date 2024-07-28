@@ -70,7 +70,7 @@ export const updateDocument = async (roomId: string, title: string) => {
   }
 };
 
-export const getAllDocuments = async (email: string ) => {
+export const getAllDocuments = async (email: string) => {
   try {
     const rooms = await liveblocks.getRooms({ userId: email });
 
@@ -96,6 +96,20 @@ export const updateDocumentAccess = async ({
       usersAccesses: usersAccesses,
     });
     if (room) {
+      const notificationId = nanoid();
+      await liveblocks.triggerInboxNotification({
+        userId: email,
+        kind: "$documentAccess",
+        subjectId: notificationId,
+        activityData: {
+          userType,
+          title: `You've been granted ${userType} access to a document by ${updatedBy.name}`,
+          updatedBy: updatedBy.name,
+          avatar: updatedBy.avatar,
+          email: updatedBy.email,
+        },
+        roomId,
+      });
     }
     revalidatePath(`/documents/${roomId}`);
     return parseStringify(room);
@@ -128,13 +142,12 @@ export const removeCollaborator = async ({
   }
 };
 
-export const deleteDocument = async (roomId:  string) => {
+export const deleteDocument = async (roomId: string) => {
   try {
     await liveblocks.deleteRoom(roomId);
     revalidatePath("/");
     redirect("/");
-
   } catch (error) {
     console.log(`Error while deleting document: ${error}`);
   }
-}
+};
