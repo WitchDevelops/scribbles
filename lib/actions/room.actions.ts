@@ -5,6 +5,7 @@ import { liveblocks } from "@/lib/liveblocks";
 import { revalidatePath } from "next/cache";
 import { parseStringify } from "@/lib/utils";
 import { getAccessType } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
 export const createDocument = async ({
   userId,
@@ -126,3 +127,14 @@ export const removeCollaborator = async ({
     console.log(`Error while removing collaborator, eror: ${error}`);
   }
 };
+
+export const deleteDocument = async (roomId:  string) => {
+  try {
+    await liveblocks.deleteRoom(roomId);
+    revalidatePath("/");
+    redirect("/");
+
+  } catch (error) {
+    console.log(`Error while deleting document: ${error}`);
+  }
+}

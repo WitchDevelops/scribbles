@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { getAllDocuments } from "@/lib/actions/room.actions";
 import Link from "next/link";
 import { dateConverter } from "@/lib/utils";
+import { DeleteModal } from "@/components/DeleteModal";
 
 const Home = async () => {
   const clerkUser = await currentUser();
@@ -36,7 +37,7 @@ const Home = async () => {
             />
           </div>
           <ul className="document-ul">
-            {documents.data.map(({ id, metadata, createdAt }) => (
+            {documents.data.map(({ id, metadata, createdAt }: Document) => (
               <li key={id} className="document-list-item">
                 <Link
                   className="document-link flex flex-1 items-center gap-4"
@@ -57,6 +58,7 @@ const Home = async () => {
                     </p>
                   </div>
                 </Link>
+                <DeleteModal roomId={id} />
               </li>
             ))}
           </ul>
